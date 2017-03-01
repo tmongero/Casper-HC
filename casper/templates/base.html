@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="//aui-cdn.atlassian.com/aui-adg/6.0.4/css/aui.min.css" media="all">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="//aui-cdn.atlassian.com/aui-adg/6.0.4/js/aui.min.js"></script>
+</head>
+
+<body>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category == 'success' %}
+                    <div class="aui-message aui-message-success">
+                      <p class="title">
+                          <strong>Success!</strong>
+                      </p>
+                      <p>{{ message }}:</p>
+                    </div>
+                {% elif category == 'error' %}
+                    <div class="aui-message aui-message-error">
+                      <p class="title">
+                          <strong>Error!</strong>
+                      </p>
+                      <p>{{ message }}:</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block body_content %}{% endblock %}
+
+</body>
+
+</html>

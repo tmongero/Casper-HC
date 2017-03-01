@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block body_content %}
+<div class="aui-page-panel">
+    <div class="aui-page-panel-inner">
+        <section class="aui-page-panel-content">
+            <h2>Configure a Jamf Pro service account</h2>
+            <p>By adding a service account you will enable this plugin to search your Jamf Pro server based upon queries made in the chat room as well as enabling additional details on some webhook notifications.</p>
+            <form class="aui" method="post" action="/hipchat/configure/update?signed_request={{ request.args.get('signed_request') }}" role="form">
+                <fieldset>
+                    <div class="field-group">
+                        <label for="jamf_url">Jamf Pro URL</label>
+                        <input class="text" type="text" id="jamf_url" name="jamf_url"
+                               {% if jamf_url %} placeholder="{{ jamf_url }} (enter a new URL)" {% else %} placeholder="https://your.jss.org" {% endif %} required>
+                    </div>
+                    <div class="field-group">
+                        <label for="jamf_username">Jamf Pro Username</label>
+                        <input class="text" type="text" id="jamf_username" name="jamf_username"
+                                {% if jamf_username %} placeholder="{{ jamf_username }} (enter a new username)" {% else %} placeholder="username" {% endif %} required>
+                    </div>
+                    <div class="field-group">
+                        <label for="jamf_password">Jamf Pro Password</label>
+                        <input class="password" type="password" id="jamf_password" name="jamf_password"
+                                {% if jamf_username %} placeholder="******** (enter a new password)" {% else %} placeholder="password" {% endif %} required>
+                    </div>
+                    <div class="buttons-container">
+                        <div class="buttons">
+                            <button class="button submit" type="submit" value="Save">Save</button>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </section>
+    </div>
+</div>
+{% endblock %}
