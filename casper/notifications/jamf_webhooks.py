@@ -69,7 +69,22 @@ def _patch_title_updated(data, hipchat_room):
 
 
 def _rest_api_operation(data, hipchat_room):
-    if hipchat_room.jamf_auth and data['authorizedUsername'] != hipchat_room.jamf_auth[0]:
+    """
+    :param data: webhook 'event'
+    :type data: dict
+    :param hipchat_room: HipChat room object
+    :type hipchat_room: models.HipChatRoom
+
+    Returns data for a Rest API webhook notification
+
+    If a HipChatRoom has been configured with a Jamf Pro account the username in the webhook data will be compared to
+    the saved account's username. If they match the notification is skipped. This prevents notifications from displaying
+    when search functions are being used.
+    """
+    if hipchat_room.jamf_configured and data['authorizedUsername'] == hipchat_room.jamf_auth[0]:
+        message = None
+        card = None
+    else:
         message = '''<p>A REST API action has been performed on the Jamf Pro server:</p>
         <p><b>API Object Type</b> {} <b>Name:</b> {} <b>ID:</b> {}</p>
         <p><b>User:</b> {} <b>Action:</b> {} <b>Success?</b> {}</p>'''.format(
@@ -81,9 +96,6 @@ def _rest_api_operation(data, hipchat_room):
             data['operationSuccessful']
         )
         card = rest_api(data)
-    else:
-        message = None
-        card = None
 
     return message, card, 'yellow'
 
