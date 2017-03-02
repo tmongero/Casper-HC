@@ -6,6 +6,11 @@ import requests
 import uuid
 
 
+def _new_uuid():
+    """Wrapper to return string format of uuid.uuid4() for jamf_webhook_id attribute"""
+    return str(uuid.uuid4())
+
+
 class HipchatRoom(db.Model):
     __tablename__ = 'HipChatRooms'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -21,10 +26,10 @@ class HipchatRoom(db.Model):
     jamf_url = db.Column(db.String(128), nullable=True)
     jamf_configured = db.Column(db.Boolean, default=False)
 
-    jamf_webhook_id = db.Column(db.String(36), unique=True, default=str(uuid.uuid4()))
+    jamf_webhook_id = db.Column(db.String(36), unique=True, default=_new_uuid)
 
     _hipchat_access_token = db.Column(db.String(255))
-    _hipchat_token_expiration = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    _hipchat_token_expiration = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, hipchat_data):
         """
