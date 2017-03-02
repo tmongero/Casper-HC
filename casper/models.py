@@ -11,7 +11,7 @@ def _new_uuid():
     return str(uuid.uuid4())
 
 
-class HipchatRoom(db.Model):
+class HipChatRoom(db.Model):
     __tablename__ = 'HipChatRooms'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 

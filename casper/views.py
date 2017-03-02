@@ -1,5 +1,5 @@
 from . import app, db
-from .models import HipchatRoom
+from .models import HipChatRoom
 from .notifications import *
 from .utilities import verify_jwt, validate_room_jwt
 import flask
@@ -38,7 +38,7 @@ def hipchat_capabilities():
 @app.route('/hipchat/installable', methods=['POST'])
 def hipchat_installable():
     data = flask.request.get_json()
-    new_hipchat_room = HipchatRoom(data)
+    new_hipchat_room = HipChatRoom(data)
     db.session.add(new_hipchat_room)
     db.session.commit()
 
@@ -57,7 +57,7 @@ def hipchat_installable():
 
 @app.route('/hipchat/installable/<oauth_id>', methods=['DELETE'])
 def hipchat_uninstall(oauth_id):
-    hipchat_room = HipchatRoom.query.filter(HipchatRoom.hipchat_oauth_id == oauth_id).first()
+    hipchat_room = HipChatRoom.query.filter(HipChatRoom.hipchat_oauth_id == oauth_id).first()
     if hipchat_room:
         db.session.delete(hipchat_room)
         db.session.commit()
@@ -126,6 +126,6 @@ def message_users(hipchat_room):
 
 @app.route('/jss/<webhook_id>', methods=['POST'])
 def jamf_inbound_webhook(webhook_id):
-    hipchat_room = HipchatRoom.query.filter(HipchatRoom.jamf_webhook_id == webhook_id).first_or_404()
+    hipchat_room = HipChatRoom.query.filter(HipChatRoom.jamf_webhook_id == webhook_id).first_or_404()
     webhook_event(hipchat_room, flask.request.get_json())
     return '', 204

@@ -1,4 +1,4 @@
-from .models import HipchatRoom
+from .models import HipChatRoom
 from .notifications import send_notification
 import flask
 import functools
@@ -7,7 +7,7 @@ import jwt
 
 def verify_jwt(signed_token):
     unvalidated_token = jwt.decode(signed_token, verify=False)
-    hipchat_room = HipchatRoom.query.filter(HipchatRoom.hipchat_oauth_id == unvalidated_token['iss']).first_or_404()
+    hipchat_room = HipChatRoom.query.filter(HipChatRoom.hipchat_oauth_id == unvalidated_token['iss']).first_or_404()
     try:
         jwt.decode(signed_token, hipchat_room.hipchat_oauth_secret)
     except jwt.exceptions.DecodeError:
