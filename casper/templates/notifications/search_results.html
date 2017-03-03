@@ -1,0 +1,23 @@
+<p><b>{{ device_list.count }} results for '{{ device_list.label }}' search: {{ device_list.parameter }}</b></p>
+<table>
+    <tr>
+        <td><b>ID</b></td>
+        <td><b>Name</b></td>
+        <td><b>Serial</b></td>
+        <td><b>MAC Address</b></td>
+        <td><b>User</b></td>
+    </tr>
+    {% for computer in device_list.results %}
+        <tr>
+            <td><a href="{{ computer.url }}">{{ computer.id }}</a> &emsp;</td>
+            <td>{{ computer.name }} &emsp;</td>
+            <td>{{ computer.serial }} &emsp;</td>
+            <td>{{ computer.mac_address }} &emsp;</td>
+            <td>{{ computer.user }} &emsp;</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% if device_list.over %}
+    <br><p><b>Not showing an additional {{ device_list.count - 25 }} results... <i>(be more specific to narrow results)</i></b></p>
+{% endif %}

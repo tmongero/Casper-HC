@@ -1,0 +1,16 @@
+<p>You can enable notifications from Jamf Pro to this room by creating webhooks using:</p>
+<p><b>https://{{ config.SERVER_DOMAIN }}/jss/{{ help.webhook_id }}</b></p>
+<p>For a list of supported webhooks type: <b>casper help webhooks</b></p>
+{% if help.jamf_configured %}
+<br><p>You can search Jamf Pro records using the following commands:
+<p><b><ul>
+    <li>casper computers {parameter}</li>
+    <li>casper mobile {parameter}</li>
+    <li>casper users {parameter}</li>
+</ul></b></p>
+<br><p>You can view the current version of your Jamf Pro server using: <b>casper version</b></p>
+<br><p>To learn more about a command type: <b>casper help {command}</b></p>
+{% else %}
+<br><p><i>In order to use additional features with your Jamf Pro server you must enable a service account for API access.
+You can do this from the <b>Configure</b> tab for the integration.</i></p>
+{% endif %}
