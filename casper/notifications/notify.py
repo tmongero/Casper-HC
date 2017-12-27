@@ -28,7 +28,7 @@ def send_notification(token, room, message, message_format='html', color='gray',
     )
 
     if not response.ok:
-        print response.text
+        print(response.text)
         response.raise_for_status()
 
 

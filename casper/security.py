@@ -13,9 +13,14 @@ class AESCipher(object):
         self.key = str(key)
 
     def encrypt(self, raw):
+        print(raw, len(raw), 'first')
         raw = self._pad(raw)
+        print(raw, len(raw))
         iv = Random.new().read(AES.block_size)
+        print(iv, len(iv))
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
+        print(cipher)
+        print(base64.b64encode(iv + cipher.encrypt(raw)), len(base64.b64encode(iv + cipher.encrypt(raw))))
         return base64.b64encode(iv + cipher.encrypt(raw))
 
     def decrypt(self, enc):
@@ -31,3 +36,11 @@ class AESCipher(object):
     @staticmethod
     def _unpad(padded):
         return padded[:-ord(padded[len(padded) - 1:])]
+
+
+def main():
+
+    pass
+
+if __name__ == "__main__":
+    main()

@@ -50,7 +50,7 @@ def search_computers(hipchat_room, hipchat_data):
         if not r.ok:
             return {}
 
-        print r.status_code, r.url
+        print(r.status_code, r.url)
 
         computer = r.json()['computer']
         message = '''<p><b>Computer:</b> {} <i>(<a href='{}'>Click here to view in Jamf Pro</a>)</i>

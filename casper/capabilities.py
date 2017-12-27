@@ -5,6 +5,10 @@ def get_capabilties(server_domain):
         "description": "A friendly HipChat plugin to Jamf Pro that allows a room to search "
                        "inventory and receive notifications from webhook events.",
         "capabilities": {
+            "oauth2Provider": {
+                "authorizationUrl": "https://jamf.hipchat.com/users/authorize",
+                "tokenUrl": "https://api.hipchat.com/v2/oauth/token"
+            },
             "installable": {
                 "callbackUrl": "https://{}/hipchat/installable".format(server_domain),
                 "allowGlobal": False,
