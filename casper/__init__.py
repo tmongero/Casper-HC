@@ -1,6 +1,6 @@
 import flask
 from . import config
-from capabilities import get_capabilties
+from .capabilities import get_capabilties
 from flask_sqlalchemy import SQLAlchemy
 from .security import AESCipher
 

@@ -26,6 +26,7 @@ def validate_room_jwt(function=None, requires_jamf_configured=True):
         def wrapper(*args, **kwargs):
             try:
                 token = flask.request.headers.get('Authorization').split()[1]
+                print('TOKEN: ', token)
             except:
                 flask.abort(401)
 

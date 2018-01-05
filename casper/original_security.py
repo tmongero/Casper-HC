@@ -1,6 +1,7 @@
 from Crypto.Cipher import AES
 from Crypto import Random
 import base64
+import hashlib
 
 
 class AESCipher(object):
@@ -10,32 +11,27 @@ class AESCipher(object):
     Encryption key must be 32 bytes in length
     """
     def __init__(self, key):
-        self.key = str(key)
+        self.block_size = 32
+        self.key = hashlib.sha256(key).digest()
 
     def encrypt(self, raw):
-        print(raw, len(raw), 'first')
         raw = self._pad(raw)
-        print(raw, len(raw))
         iv = Random.new().read(AES.block_size)
-        print(iv, len(iv))
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
-        print(cipher)
-        print(base64.b64encode(iv + cipher.encrypt(raw)), len(base64.b64encode(iv + cipher.encrypt(raw))))
         return base64.b64encode(iv + cipher.encrypt(raw))
 
     def decrypt(self, enc):
         enc = base64.b64decode(enc)
-        iv = enc[:16]
+        iv = enc[:AES.block_size]
         cipher = AES.new(self.key, AES.MODE_CBC, iv)
-        return self._unpad(cipher.decrypt(enc[16:]))
+        return self._unpad(cipher.decrypt(enc[AES.block_size:]))
 
-    @staticmethod
-    def _pad(raw):
-        return raw + (AES.block_size - len(raw) % AES.block_size) * chr(AES.block_size - len(raw) % AES.block_size)
+    def _pad(self, raw):
+        return raw + (self.block_size - len(raw) % self.block_size) * chr(self.block_size - len(raw) & self.block_size)
 
     @staticmethod
     def _unpad(padded):
-        return padded[:-ord(padded[len(padded) - 1:])]
+        return padded[:-ord(padded[len(padded)-1:])]
 
 
 def main():

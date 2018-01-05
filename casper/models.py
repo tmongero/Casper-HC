@@ -16,19 +16,19 @@ class HipChatRoom(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     hipchat_oauth_id = db.Column(db.String(255), unique=True)
-    _hipchat_oauth_secret = db.Column(db.String(255), unique=True)
+    _hipchat_oauth_secret = db.Column(db.VARBINARY(255), unique=True)
 
     hipchat_room_id = db.Column(db.Integer)
     hipchat_group_id = db.Column(db.Integer)
 
-    _jamf_username = db.Column(db.String(255), nullable=True)
-    _jamf_password = db.Column(db.String(255), nullable=True)
+    _jamf_username = db.Column(db.VARBINARY(255), nullable=True)
+    _jamf_password = db.Column(db.VARBINARY(255), nullable=True)
     jamf_url = db.Column(db.String(128), nullable=True)
     jamf_configured = db.Column(db.Boolean, default=False)
 
     jamf_webhook_id = db.Column(db.String(36), unique=True, default=_new_uuid)
 
-    _hipchat_access_token = db.Column(db.String(255))
+    _hipchat_access_token = db.Column(db.VARBINARY(255))
     _hipchat_token_expiration = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 
     def __init__(self, hipchat_data):
@@ -61,8 +61,7 @@ class HipChatRoom(db.Model):
             r.raise_for_status()
 
         new_access_token = r.json()
-        # self._hipchat_access_token = cipher.encrypt(new_access_token['access_token'])
-        self._hipchat_access_token = new_access_token['access_token']
+        self._hipchat_access_token = cipher.encrypt(new_access_token['access_token'])
         self._hipchat_token_expiration = datetime.datetime.utcnow() + datetime.timedelta(
             seconds=int(new_access_token['expires_in'])
         )
@@ -70,27 +69,23 @@ class HipChatRoom(db.Model):
 
     @property
     def hipchat_oauth_secret(self):
-        # return cipher.decrypt(self._hipchat_oauth_secret)
-        return self._hipchat_oauth_secret
+        return cipher.decrypt(self._hipchat_oauth_secret)
 
     @hipchat_oauth_secret.setter
     def hipchat_oauth_secret(self, value):
-        # self._hipchat_oauth_secret = cipher.encrypt(value)
-        self._hipchat_oauth_secret = value
+        self._hipchat_oauth_secret = cipher.encrypt(value)
 
     @property
     def hipchat_token(self):
         if datetime.datetime.utcnow() > self._hipchat_token_expiration:
             self._generate_hipchat_token()
 
-        # return cipher.decrypt(self._hipchat_access_token)
-        return self._hipchat_access_token
+        return cipher.decrypt(self._hipchat_access_token)
 
     @property
     def jamf_auth(self):
         if self._jamf_username and self._jamf_password:
-            # return cipher.decrypt(self._jamf_username), cipher.decrypt(self._jamf_password)
-            return self._jamf_username, self._jamf_password
+            return cipher.decrypt(self._jamf_username), cipher.decrypt(self._jamf_password)
         else:
             return None
 
@@ -107,9 +102,7 @@ class HipChatRoom(db.Model):
             r.raise_for_status()
 
         self.jamf_url = url
-        # self._jamf_username = cipher.encrypt(username)
-        # self._jamf_password = cipher.encrypt(password)
-        self._jamf_username = username
-        self._jamf_password = password
+        self._jamf_username = cipher.encrypt(username)
+        self._jamf_password = cipher.encrypt(password)
         self.jamf_configured = True
         db.session.commit()
